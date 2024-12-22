@@ -1,52 +1,73 @@
-from crewai import Crew, Process
-
-from src.agents.llama_agent import LlamaAgent
-from src.reporting.report_generator import ReportGenerator
-from src.workflows.project_tracker import ProjectTracker
-
+from crewai import Crew
+from src.agents.project_agents import ProjectAgents
+from src.tools.github_tools import GitHubTools
+from src.tools.technical_tools import TechnicalTools
+from src.tools.devops_tools import DevOpsTools
 
 class ProjectOrchestrator:
     def __init__(self):
-        self.llama = LlamaAgent()
-        self.setup_components()
+        self.agents = ProjectAgents()
+        self.github_tools = GitHubTools()
+        self.technical_tools = TechnicalTools()
+        self.devops_tools = DevOpsTools()
 
-    def setup_components(self):
-        self.portfolio_manager = self.llama.create_portfolio_manager()
-        self.tech_lead = self.llama.create_tech_lead()
-        self.qa_specialist = self.llama.create_qa_specialist()
-        self.tracker = ProjectTracker()
+    def run_analysis(self):
+        """Run complete project analysis using CrewAI"""
+        # Create the crew
+        crew = Crew(
+            agents=[
+                self.agents.create_project_manager(),
+                self.agents.create_tech_lead(),
+                self.agents.create_devops_specialist()
+            ],
+            tasks=self.create_tasks(),
+            process='sequential'
+        )
 
-    def create_daily_tasks(self):
+        # Start the analysis
+        result = crew.kickoff()
+        return result
+
+    def create_tasks(self):
+        """Create tasks for the crew"""
         return [
             {
-                "role": "Portfolio Manager",
-                "task": "Review project status and assign tasks",
-                "priority": "high",
+                'description': (
+                    "Analyze all repositories and create work items. Consider:\n"
+                    "1. Current project status\n"
+                    "2. Open issues and PRs\n"
+                    "3. Team workload\n"
+                    "4. Priority tasks"
+                ),
+                'agent': self.agents.create_project_manager()
             },
             {
-                "role": "Tech Lead",
-                "task": "Code review and architecture assessment",
-                "priority": "high",
+                'description': (
+                    "Review technical debt and architecture. Focus on:\n"
+                    "1. Code quality\n"
+                    "2. Architecture patterns\n"
+                    "3. Technical improvements\n"
+                    "4. Performance issues"
+                ),
+                'agent': self.agents.create_tech_lead()
             },
             {
-                "role": "QA Specialist",
-                "task": "Test coverage and quality metrics review",
-                "priority": "medium",
-            },
+                'description': (
+                    "Monitor infrastructure and DevOps. Check:\n"
+                    "1. Pipeline status\n"
+                    "2. Deployment health\n"
+                    "3. Infrastructure issues\n"
+                    "4. Security concerns"
+                ),
+                'agent': self.agents.create_devops_specialist()
+            }
         ]
 
-    def run_daily_review(self):
-        crew = Crew(
-            agents=[self.portfolio_manager, self.tech_lead, self.qa_specialist],
-            tasks=self.create_daily_tasks(),
-            process=Process.sequential,
-            verbose=True,
-        )
-        return crew.kickoff()
-
-
-if __name__ == "__main__":
+def main():
     orchestrator = ProjectOrchestrator()
-    result = orchestrator.run_daily_review()
-    print("Daily Review Complete!\n")
-    print(result)
+    results = orchestrator.run_analysis()
+    print("Analysis completed!")
+    print(results)
+
+if __name__ == '__main__':
+    main()
