@@ -1,6 +1,7 @@
-from langchain.llms import LlamaCpp
-from crewai import Agent
 import os
+
+from crewai import Agent
+from langchain.llms import LlamaCpp
 
 
 class LlamaAgent:

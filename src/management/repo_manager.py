@@ -1,7 +1,8 @@
-from github import Github
 import json
 import os
 from datetime import datetime
+
+from github import Github
 
 
 class RepositoryManager:

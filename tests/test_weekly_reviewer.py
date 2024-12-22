@@ -1,6 +1,9 @@
-import pytest
 from unittest.mock import Mock, patch
+
+import pytest
+
 from src.workflows.weekly_reviewer import WeeklyReviewer
+
 
 class TestWeeklyReviewer:
     @pytest.fixture

@@ -1,13 +1,16 @@
-import pytest
 from unittest.mock import Mock, patch
+
+import pytest
+
 from src.workflows.status_updater import StatusUpdater
+
 
 class TestStatusUpdater:
     @pytest.fixture
     def updater(self):
         return StatusUpdater()
 
-    @patch('github.Github')
+    @patch("github.Github")
     def test_analyze_repository(self, mock_github):
         mock_repo = Mock()
         mock_repo.get_issues().totalCount = 5
@@ -17,6 +20,6 @@ class TestStatusUpdater:
         updater = StatusUpdater()
         result = updater.analyze_repository(mock_repo)
 
-        assert 'open_issues' in result
-        assert 'open_prs' in result
-        assert 'last_commit' in result
+        assert "open_issues" in result
+        assert "open_prs" in result
+        assert "last_commit" in result
