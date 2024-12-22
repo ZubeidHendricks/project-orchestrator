@@ -1,0 +1,72 @@
+{
+  "teams": {
+    "pos_team": {
+      "lead": "ZubeidHendricks",
+      "developers": [
+        {
+          "github": "dev1_username",
+          "expertise": ["frontend", "payment-integration"],
+          "projects": ["blazor-pos-system", "modern-pos-system"],
+          "level": "senior"
+        },
+        {
+          "github": "dev2_username",
+          "expertise": ["backend", "database"],
+          "projects": ["ultimate-pos-system"],
+          "level": "mid"
+        }
+      ]
+    },
+    "ai_team": {
+      "lead": "ZubeidHendricks",
+      "developers": [
+        {
+          "github": "ai_dev1_username",
+          "expertise": ["machine-learning", "api-development"],
+          "projects": ["heybud", "happai"],
+          "level": "senior"
+        }
+      ]
+    },
+    "blockchain_team": {
+      "lead": "ZubeidHendricks",
+      "developers": [
+        {
+          "github": "blockchain_dev1_username",
+          "expertise": ["smart-contracts", "defi"],
+          "projects": ["crypto-arb-engine", "crypto-arb-platform"],
+          "level": "senior"
+        }
+      ]
+    },
+    "devops_team": {
+      "lead": "ZubeidHendricks",
+      "engineers": [
+        {
+          "github": "devops1_username",
+          "expertise": ["ci-cd", "infrastructure"],
+          "level": "senior"
+        }
+      ]
+    }
+  },
+  "assignment_rules": {
+    "pos": {
+      "frontend_issues": ["pos_team.developers[0]"],
+      "backend_issues": ["pos_team.developers[1]"],
+      "critical_issues": ["pos_team.lead"]
+    },
+    "ai": {
+      "model_issues": ["ai_team.developers[0]"],
+      "critical_issues": ["ai_team.lead"]
+    },
+    "blockchain": {
+      "smart_contract_issues": ["blockchain_team.developers[0]"],
+      "critical_issues": ["blockchain_team.lead"]
+    },
+    "devops": {
+      "pipeline_issues": ["devops_team.engineers[0]"],
+      "critical_issues": ["devops_team.lead"]
+    }
+  }
+}
