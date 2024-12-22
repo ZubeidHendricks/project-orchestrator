@@ -1,0 +1,28 @@
+{
+  "pipeline_checks": {
+    "failure_threshold": 2,
+    "success_rate_minimum": 80,
+    "check_interval_minutes": 5
+  },
+  "deployment_checks": {
+    "max_deployment_time": 30,
+    "rollback_threshold": 1,
+    "health_check_timeout": 5
+  },
+  "performance_thresholds": {
+    "build_time_minutes": 15,
+    "test_time_minutes": 10,
+    "memory_usage_mb": 1024
+  },
+  "alert_rules": {
+    "immediate_notification": [
+      "pipeline_failure",
+      "deployment_failure",
+      "security_breach"
+    ],
+    "daily_summary": [
+      "performance_degradation",
+      "test_failures"
+    ]
+  }
+}

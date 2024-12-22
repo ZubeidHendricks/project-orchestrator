@@ -1,0 +1,23 @@
+{
+  "devops_team": [
+    "ZubeidHendricks"
+  ],
+  "developers": [
+    "ZubeidHendricks"
+  ],
+  "assignments": {
+    "pipeline_failures": ["devops_team"],
+    "deployment_issues": ["devops_team"],
+    "security_alerts": ["devops_team", "developers"],
+    "performance_issues": ["developers"],
+    "build_failures": ["developers"]
+  },
+  "rotation": {
+    "enabled": true,
+    "period": "weekly"
+  },
+  "workload_limits": {
+    "max_open_issues": 5,
+    "max_critical_issues": 2
+  }
+}
