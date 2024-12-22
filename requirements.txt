@@ -1,8 +1,9 @@
 crewai
 langchain
-anthropic
+llama-cpp-python
 python-dotenv
 PyGithub
 pandas
 requests
 pytest
+click
