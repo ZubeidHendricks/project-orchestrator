@@ -1,0 +1,46 @@
+{
+  "project_types": {
+    "pos": {
+      "name": "Point of Sale Systems",
+      "repositories": [
+        "blazor-pos-system",
+        "modern-pos-system",
+        "ultimate-pos-system"
+      ],
+      "checks": [
+        "payment_integration",
+        "security",
+        "database_performance"
+      ],
+      "priority": "high"
+    },
+    "ai": {
+      "name": "AI/ML Projects",
+      "repositories": [
+        "heybud",
+        "heybud-chrome",
+        "happai"
+      ],
+      "checks": [
+        "model_performance",
+        "api_integration",
+        "inference_speed"
+      ],
+      "priority": "high"
+    },
+    "blockchain": {
+      "name": "Blockchain/Crypto",
+      "repositories": [
+        "crypto-arb-engine",
+        "crypto-arb-platform",
+        "sme-collaboration-platform"
+      ],
+      "checks": [
+        "smart_contract_security",
+        "gas_optimization",
+        "trading_performance"
+      ],
+      "priority": "high"
+    }
+  }
+}
