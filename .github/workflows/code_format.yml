@@ -9,9 +9,13 @@ on:
 jobs:
   format:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GHUB_TOKEN }}
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -33,8 +37,9 @@ jobs:
 
     - name: Commit changes
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}
         git add .
         git commit -m "Apply automatic formatting" || echo "No changes to commit"
         git push
