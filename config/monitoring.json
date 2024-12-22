@@ -1,0 +1,22 @@
+{
+  "check_intervals": {
+    "basic": 300,
+    "detailed": 3600,
+    "deep": 86400
+  },
+  "alert_channels": {
+    "github_issues": true,
+    "email": false,
+    "slack": false
+  },
+  "metrics": {
+    "collect_performance": true,
+    "collect_errors": true,
+    "collect_usage": true
+  },
+  "retention": {
+    "alerts": 30,
+    "metrics": 90,
+    "reports": 180
+  }
+}

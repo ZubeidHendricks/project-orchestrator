@@ -1,0 +1,22 @@
+{
+  "common": {
+    "open_issues": 10,
+    "stale_prs": 5,
+    "test_coverage": 80
+  },
+  "pos": {
+    "security_score": 90,
+    "payment_errors": 0,
+    "database_latency": 100
+  },
+  "ai": {
+    "model_accuracy": 85,
+    "inference_latency": 200,
+    "api_errors": 1
+  },
+  "blockchain": {
+    "gas_threshold": 500000,
+    "contract_coverage": 95,
+    "security_score": 95
+  }
+}
