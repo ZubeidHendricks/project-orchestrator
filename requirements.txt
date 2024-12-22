@@ -1,0 +1,8 @@
+crewai
+langchain
+anthropic
+python-dotenv
+PyGithub
+pandas
+requests
+pytest
