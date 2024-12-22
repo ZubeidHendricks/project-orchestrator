@@ -1,0 +1,45 @@
+name: Project Orchestration with CrewAI
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'  # Run every 4 hours
+  workflow_dispatch:     # Manual trigger
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GHUB_TOKEN }}
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install crewai langchain llama-cpp-python PyGithub
+
+    - name: Download Llama model
+      run: |
+        mkdir -p models
+        curl -L https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf \
+        -o models/llama-2-7b-chat.gguf
+
+    - name: Run CrewAI Orchestrator
+      env:
+        GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
+      run: python src/main.py
+
+    - name: Save Analysis Results
+      if: success()
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add data/
+        git commit -m "Update analysis results" || echo "No changes to commit"
+        git push
