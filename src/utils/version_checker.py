@@ -1,24 +1,26 @@
-import sys
-import pkg_resources
 import logging
+import sys
 from typing import Dict, List, Optional
+
+import pkg_resources
+
 
 class VersionChecker:
     def __init__(self):
         self.required_versions = {
-            'python': '3.10',
-            'crewai': '0.1.25',
-            'langchain': '0.0.325',
-            'pydantic': '2.0.0',
-            'typeguard': '4.0.0'
+            "python": "3.10",
+            "crewai": "0.1.25",
+            "langchain": "0.0.325",
+            "pydantic": "2.0.0",
+            "typeguard": "4.0.0",
         }
         self.logger = logging.getLogger(__name__)
 
     def check_python_version(self) -> bool:
         """Check if Python version meets requirements"""
         current_version = sys.version_info
-        required_version = tuple(map(int, self.required_versions['python'].split('.')))
-        
+        required_version = tuple(map(int, self.required_versions["python"].split(".")))
+
         if current_version < required_version:
             self.logger.error(
                 f"Python version {'.'.join(map(str, current_version))} is not supported. "
@@ -31,15 +33,16 @@ class VersionChecker:
         """Check if installed packages meet version requirements"""
         results = {}
         for package, required_version in self.required_versions.items():
-            if package == 'python':
+            if package == "python":
                 continue
-            
+
             try:
                 installed_version = pkg_resources.get_distribution(package).version
-                meets_requirement = pkg_resources.parse_version(installed_version) >= \
-                                  pkg_resources.parse_version(required_version)
+                meets_requirement = pkg_resources.parse_version(
+                    installed_version
+                ) >= pkg_resources.parse_version(required_version)
                 results[package] = meets_requirement
-                
+
                 if not meets_requirement:
                     self.logger.error(
                         f"{package} version {installed_version} is not supported. "
@@ -48,7 +51,7 @@ class VersionChecker:
             except pkg_resources.DistributionNotFound:
                 self.logger.error(f"{package} is not installed.")
                 results[package] = False
-                
+
         return results
 
     def get_upgrade_commands(self, failed_checks: Dict[str, bool]) -> List[str]:
@@ -63,7 +66,7 @@ class VersionChecker:
     def verify_environment(self) -> bool:
         """Verify entire environment meets requirements"""
         self.logger.info("Checking environment compatibility...")
-        
+
         # Check Python version
         python_ok = self.check_python_version()
         if not python_ok:
