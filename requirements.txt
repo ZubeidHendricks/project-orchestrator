@@ -1,9 +1,6 @@
-crewai
-langchain
+crewai>=0.1.25
+langchain>=0.0.325
 llama-cpp-python
-python-dotenv
 PyGithub
-pandas
-requests
-pytest
-click
+pydantic>=2.0.0
+typeguard>=4.0.0
