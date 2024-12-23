@@ -7,7 +7,8 @@ on:
 
 jobs:
   orchestrate:
-    runs-on: ubuntu-latest
+    # Use a larger runner for 70B model
+    runs-on: ubuntu-latest-16-cores
 
     steps:
     - uses: actions/checkout@v3
@@ -17,24 +18,34 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.10'  # Updated to Python 3.10
+        python-version: '3.10'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install 'crewai>=0.1.25'
         pip install 'langchain>=0.0.325'
-        pip install llama-cpp-python PyGithub
+        pip install llama-cpp-python[cuda]
+        pip install PyGithub
 
-    - name: Download Llama model
+    - name: Download Llama 70B model
       run: |
         mkdir -p models
-        curl -L https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/resolve/main/llama-2-7b-chat.Q4_K_M.gguf \
-        -o models/llama-2-7b-chat.gguf
+        curl -L https://huggingface.co/TheBloke/Llama-2-70B-Chat-GGUF/resolve/main/llama-2-70b-chat.Q4_K_M.gguf \
+        -o models/llama-2-70b-chat.gguf
+
+    - name: Set up CUDA
+      run: |
+        nvidia-smi
+        export CUDA_VISIBLE_DEVICES=0
 
     - name: Run CrewAI Orchestrator
       env:
         GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
+        LLAMA_MODEL_PATH: models/llama-2-70b-chat.gguf
+        # Add GPU configuration
+        CUDA_VISIBLE_DEVICES: 0
+        GPU_MEMORY: 16G
       run: python src/main.py
 
     - name: Save Analysis Results
