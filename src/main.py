@@ -1,30 +1,32 @@
 import logging
 import sys
+
 from crewai import Crew
+
 from src.agents.project_agents import ProjectAgents
+from src.tools.devops_tools import DevOpsTools
 from src.tools.github_tools import GitHubTools
 from src.tools.technical_tools import TechnicalTools
-from src.tools.devops_tools import DevOpsTools
-from src.utils.version_checker import VersionChecker
 from src.utils.fallback_handler import FallbackHandler
+from src.utils.version_checker import VersionChecker
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
 
 class ProjectOrchestrator:
     def __init__(self):
         self.version_checker = VersionChecker()
         self.fallback_handler = FallbackHandler()
-        
+
         # Verify environment before proceeding
         if not self.verify_environment():
             logger.error("Environment verification failed")
             sys.exit(1)
-            
+
         try:
             self.setup_components()
         except Exception as e:
@@ -42,7 +44,7 @@ class ProjectOrchestrator:
         except Exception as e:
             logger.error(f"Failed to initialize ProjectAgents: {str(e)}")
             # Try fallback LLM
-            fallback_llm = self.fallback_handler.get_fallback_llm('llama')
+            fallback_llm = self.fallback_handler.get_fallback_llm("llama")
             if fallback_llm:
                 logger.info("Using fallback LLM")
                 self.agents = ProjectAgents(llm=fallback_llm)
@@ -61,10 +63,10 @@ class ProjectOrchestrator:
                 agents=[
                     self.agents.create_project_manager(),
                     self.agents.create_tech_lead(),
-                    self.agents.create_devops_specialist()
+                    self.agents.create_devops_specialist(),
                 ],
                 tasks=self.create_tasks(),
-                process='sequential'
+                process="sequential",
             )
 
             # Start the analysis
@@ -82,35 +84,35 @@ class ProjectOrchestrator:
         """Create tasks for the crew"""
         return [
             {
-                'description': (
+                "description": (
                     "Analyze all repositories and create work items. Consider:\n"
                     "1. Current project status\n"
                     "2. Open issues and PRs\n"
                     "3. Team workload\n"
                     "4. Priority tasks"
                 ),
-                'agent': self.agents.create_project_manager()
+                "agent": self.agents.create_project_manager(),
             },
             {
-                'description': (
+                "description": (
                     "Review technical debt and architecture. Focus on:\n"
                     "1. Code quality\n"
                     "2. Architecture patterns\n"
                     "3. Technical improvements\n"
                     "4. Performance issues"
                 ),
-                'agent': self.agents.create_tech_lead()
+                "agent": self.agents.create_tech_lead(),
             },
             {
-                'description': (
+                "description": (
                     "Monitor infrastructure and DevOps. Check:\n"
                     "1. Pipeline status\n"
                     "2. Deployment health\n"
                     "3. Infrastructure issues\n"
                     "4. Security concerns"
                 ),
-                'agent': self.agents.create_devops_specialist()
-            }
+                "agent": self.agents.create_devops_specialist(),
+            },
         ]
 
     def handle_analysis_error(self, error: Exception):
@@ -122,10 +124,11 @@ class ProjectOrchestrator:
             self.github_tools.github_issue_creation(
                 title="[ERROR] Project Analysis Failed",
                 body=f"Analysis failed with error:\n```\n{str(error)}\n```",
-                labels=['error', 'needs-attention']
+                labels=["error", "needs-attention"],
             )
         except Exception as e:
             logger.error(f"Failed to create error tracking issue: {str(e)}")
+
 
 def main():
     try:
@@ -138,5 +141,6 @@ def main():
         logger.error(f"Failed to run orchestrator: {str(e)}")
         return 1
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sys.exit(main())
