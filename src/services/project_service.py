@@ -1,14 +1,12 @@
-from typing import List, Optional
 from datetime import datetime
+from typing import List, Optional
+
 from github import Github
-from src.models.project_models import (
-    Project,
-    ProjectType,
-    ProjectStatus,
-    Developer,
-    ProjectIssue,
-    ProjectMetrics
-)
+
+from src.models.project_models import (Developer, Project, ProjectIssue,
+                                       ProjectMetrics, ProjectStatus,
+                                       ProjectType)
+
 
 class ProjectService:
     def __init__(self, github_token: str):
@@ -17,21 +15,21 @@ class ProjectService:
     async def create_project(self, project_data: dict) -> Project:
         """Create a new project with validation"""
         project = Project(**project_data)
-        
+
         # Additional validation logic here
         self._validate_team_members(project.team_members)
-        
+
         return project
 
     async def update_project_metrics(self, project: Project) -> ProjectMetrics:
         """Update project metrics from GitHub"""
         try:
             repo = self.github.get_repo(project.repository_url)
-            
+
             metrics = ProjectMetrics(
-                open_issues=repo.get_issues(state='open').totalCount,
-                completed_issues=repo.get_issues(state='closed').totalCount,
-                last_deployment=self._get_last_deployment_date(repo)
+                open_issues=repo.get_issues(state="open").totalCount,
+                completed_issues=repo.get_issues(state="closed").totalCount,
+                last_deployment=self._get_last_deployment_date(repo),
             )
 
             # Update project with new metrics
