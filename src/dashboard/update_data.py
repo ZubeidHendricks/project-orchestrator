@@ -5,9 +5,7 @@ from datetime import datetime
 from github import Github
 
 def update_dashboard_data():
-    """
-    Generate comprehensive dashboard data for project-orchestrator
-    """
+    """Generate comprehensive dashboard data for project-orchestrator"""
     # Ensure data directory exists
     os.makedirs('data', exist_ok=True)
     
