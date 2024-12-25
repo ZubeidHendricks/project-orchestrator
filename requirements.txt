@@ -1,4 +1,5 @@
-PyGithub==1.58.2
-numpy==1.21.5
-scikitlearn==1.0.2
-networkx==2.6.3
+PyGithub
+scikit-learn
+slack-sdk
+cryptography
+numpy
