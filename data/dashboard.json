@@ -1,0 +1,27 @@
+{
+  "timestamp": "2024-12-25T18:44:01.566406",
+  "repository_info": {
+    "name": "project-orchestrator",
+    "description": "Automated project management and orchestration system powered by CrewAI",
+    "stars": 0,
+    "forks": 0
+  },
+  "issues": {
+    "total_open": 0,
+    "total_closed": 1,
+    "assignments": []
+  },
+  "workflows": [
+    "code_format",
+    "code_quality",
+    "crew_orchestrator",
+    "daily_orchestration",
+    "dev_integration",
+    "main",
+    "monitoring",
+    "orchestrator",
+    "project_analysis",
+    "status_update",
+    "weekly_review"
+  ]
+}
