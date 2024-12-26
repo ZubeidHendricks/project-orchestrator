@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 import os
 import json
-import numpy as np
 import logging
 from datetime import datetime
 from github import Github
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, 
@@ -116,10 +113,6 @@ class MasterProjectOrchestrator:
         
         return roadmap
     
-    def allocate_resources(self):
-        """Intelligent resource allocation across projects"""
-        logger.info("Initiating cross-project resource allocation")
-    
     def generate_comprehensive_report(self):
         """Generate an overall project status report"""
         report = {
@@ -145,11 +138,6 @@ class MasterProjectOrchestrator:
             
             report['project_groups'][group] = group_status
         
-        # Save report
-        os.makedirs('reports', exist_ok=True)
-        with open('reports/project_status.json', 'w') as f:
-            json.dump(report, f, indent=2)
-        
         return report
 
 def main():
@@ -163,14 +151,11 @@ def main():
         
         # Generate comprehensive roadmap
         roadmap = orchestrator.generate_project_roadmap()
-        
-        # Allocate resources
-        orchestrator.allocate_resources()
+        print("Roadmap generated successfully")
         
         # Generate project status report
-        orchestrator.generate_comprehensive_report()
-        
-        logger.info("Master Project Orchestration completed successfully")
+        report = orchestrator.generate_comprehensive_report()
+        print("Project status report generated successfully")
     except Exception as e:
         logger.error(f"Project orchestration failed: {e}")
 
