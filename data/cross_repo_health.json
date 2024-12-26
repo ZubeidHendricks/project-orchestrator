@@ -1,0 +1,16 @@
+{
+  "timestamp": "2024-12-26T19:42:33.850983",
+  "repositories": {
+    "ZubeidHendricks/project-orchestrator": {
+      "total_issues": 0,
+      "open_issues": 0,
+      "last_updated": "2024-12-26T19:40:34"
+    },
+    "ZubeidHendricks/ai-dev-orchestrator": {
+      "total_issues": 1,
+      "open_issues": 1,
+      "last_updated": "2024-12-23T22:33:04"
+    }
+  },
+  "cross_repo_dependencies": []
+}
