@@ -52,6 +52,53 @@ class MasterProjectOrchestrator:
                 except Exception as e:
                     logger.error(f"Could not initialize repository {full_repo_name}: {e}")
     
+    def create_new_project(self, project_name, repositories, objectives):
+        """
+        Programmatically create a new project group with repositories and issues
+        
+        Args:
+            project_name (str): Name of the project group
+            repositories (list): List of repository names to create
+            objectives (list): Strategic objectives for the project
+        """
+        # Sanitize project group name
+        project_group_key = project_name.upper().replace(' ', '_')
+        
+        # Add the new project group to existing groups
+        self.project_groups[project_group_key] = repositories
+        
+        # Create repositories and issues
+        for repo_name in repositories:
+            try:
+                # Create repository
+                repo = self.gh.get_user().create_repo(
+                    name=repo_name,
+                    description=f"{project_name} - Project Repository",
+                    private=True  # Optional: set to False for public repos
+                )
+                
+                # Create issues for each objective
+                for objective in objectives:
+                    issue = repo.create_issue(
+                        title=f"Project Objective: {objective}",
+                        body=f"Strategic task for {project_name} development.\n\n"
+                         "Detailed Requirements:\n"
+                         "- Break down into specific implementation steps\n"
+                         "- Define clear acceptance criteria\n"
+                         "- Align with overall project vision",
+                        labels=['strategic-objective', 'project-setup']
+                    )
+                    
+                    logger.info(f"Created issue in {repo_name}: {issue.title}")
+                
+                # Update repositories dictionary
+                self.repositories[repo_name] = repo
+            
+            except Exception as e:
+                logger.error(f"Failed to create repository {repo_name}: {e}")
+        
+        return self.project_groups[project_group_key]
+    
     def generate_project_roadmap(self):
         """Create a comprehensive roadmap for all project groups"""
         roadmap = {}
@@ -149,13 +196,30 @@ def main():
     try:
         orchestrator = MasterProjectOrchestrator(token)
         
+        # Example of creating a new project
+        new_project = orchestrator.create_new_project(
+            project_name="AI Content Generator",
+            repositories=[
+                "ai-content-backend", 
+                "ai-content-frontend", 
+                "ai-content-ml-service"
+            ],
+            objectives=[
+                "Design Content Generation Architecture",
+                "Implement Multi-Model Support",
+                "Create User Interface",
+                "Develop API Endpoints",
+                "Implement User Authentication"
+            ]
+        )
+        
         # Generate comprehensive roadmap
         roadmap = orchestrator.generate_project_roadmap()
-        print("Roadmap generated successfully")
         
         # Generate project status report
         report = orchestrator.generate_comprehensive_report()
-        print("Project status report generated successfully")
+        
+        logger.info("Project orchestration completed successfully")
     except Exception as e:
         logger.error(f"Project orchestration failed: {e}")
 
