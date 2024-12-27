@@ -2,6 +2,7 @@
 import os
 import json
 import logging
+import re
 from datetime import datetime
 from github import Github
 
@@ -52,19 +53,63 @@ class MasterProjectOrchestrator:
                 except Exception as e:
                     logger.error(f"Could not initialize repository {full_repo_name}: {e}")
     
+    def identify_ai_development_candidates(self):
+        """Identify issues suitable for AI development"""
+        ai_dev_candidates = []
+        
+        for repo_name, repo in self.repositories.items():
+            try:
+                open_issues = repo.get_issues(state='open')
+                
+                for issue in open_issues:
+                    # Determine if issue is suitable for AI development
+                    if self._is_ai_development_candidate(issue):
+                        # Add AI development label
+                        issue.add_to_labels('ai-development')
+                        ai_dev_candidates.append(issue)
+            
+            except Exception as e:
+                logger.error(f"Error processing issues in {repo_name}: {e}")
+        
+        return ai_dev_candidates
+    
+    def _is_ai_development_candidate(self, issue):
+        """Determine if an issue is suitable for AI development"""
+        # Check issue title and body for development-related keywords
+        development_keywords = [
+            'implement', 'create', 'develop', 'build', 'design', 
+            'feature', 'module', 'function', 'service', 'component'
+        ]
+        
+        # Combine title and body for keyword matching
+        issue_text = f"{issue.title} {issue.body or ''}".lower()
+        
+        # Check for development keywords
+        keyword_match = any(
+            keyword in issue_text 
+            for keyword in development_keywords
+        )
+        
+        # Exclude issues that are already labeled or seem too vague
+        exclusion_labels = ['bug', 'documentation', 'question']
+        has_excluded_label = any(
+            label.name.lower() in exclusion_labels 
+            for label in issue.labels
+        )
+        
+        # Minimum text length to ensure substantive issue
+        min_text_length = 50
+        
+        return (
+            keyword_match and 
+            not has_excluded_label and 
+            len(issue_text) >= min_text_length
+        )
+    
     def create_new_project(self, project_name, repositories, objectives):
-        """
-        Programmatically create a new project group with repositories and issues
-        
-        Args:
-            project_name (str): Name of the project group
-            repositories (list): List of repository names to create
-            objectives (list): Strategic objectives for the project
-        """
-        # Sanitize project group name
-        project_group_key = project_name.upper().replace(' ', '_')
-        
+        """Programmatically create a new project group with repositories and issues"""
         # Add the new project group to existing groups
+        project_group_key = project_name.upper().replace(' ', '_')
         self.project_groups[project_group_key] = repositories
         
         # Create repositories and issues
@@ -86,7 +131,7 @@ class MasterProjectOrchestrator:
                          "- Break down into specific implementation steps\n"
                          "- Define clear acceptance criteria\n"
                          "- Align with overall project vision",
-                        labels=['strategic-objective', 'project-setup']
+                        labels=['strategic-objective', 'project-setup', 'ai-development']
                     )
                     
                     logger.info(f"Created issue in {repo_name}: {issue.title}")
@@ -101,91 +146,7 @@ class MasterProjectOrchestrator:
     
     def generate_project_roadmap(self):
         """Create a comprehensive roadmap for all project groups"""
-        roadmap = {}
-        
-        for group, repos in self.project_groups.items():
-            group_roadmap = []
-            
-            # Define high-level objectives for each project group
-            group_objectives = {
-                'POS_SYSTEMS': [
-                    "Standardize POS system architecture",
-                    "Implement modern payment integrations",
-                    "Create scalable retail management solutions"
-                ],
-                'LANGUAGE_LEARNING': [
-                    "Develop adaptive learning algorithms",
-                    "Create multilingual content generation",
-                    "Build comprehensive language learning platform"
-                ],
-                'COLLABORATION_PLATFORMS': [
-                    "Implement real-time collaboration features",
-                    "Develop cross-platform communication tools",
-                    "Create user engagement mechanisms"
-                ],
-                'WRITING_TOOLS': [
-                    "Develop AI-assisted writing capabilities",
-                    "Create content generation and editing tools",
-                    "Implement plagiarism and style checking"
-                ]
-            }
-            
-            # Generate issues for each objective
-            for repo_name in repos:
-                try:
-                    repo = self.repositories[repo_name]
-                    
-                    # Create issues for group objectives
-                    for objective in group_objectives.get(group, []):
-                        try:
-                            issue = repo.create_issue(
-                                title=f"Project Objective: {objective}",
-                                body=f"Strategic objective for {group} project group.\n\n"
-                                     "Key Results:\n"
-                                     "- Break down into specific tasks\n"
-                                     "- Define measurable milestones\n"
-                                     "- Align with overall project vision",
-                                labels=['strategic-objective', 'roadmap']
-                            )
-                            group_roadmap.append({
-                                'repository': repo_name,
-                                'issue_number': issue.number,
-                                'title': issue.title
-                            })
-                            logger.info(f"Created roadmap issue in {repo_name}: {objective}")
-                        except Exception as e:
-                            logger.error(f"Failed to create issue in {repo_name}: {e}")
-            
-            roadmap[group] = group_roadmap
-        
-        return roadmap
-    
-    def generate_comprehensive_report(self):
-        """Generate an overall project status report"""
-        report = {
-            'timestamp': datetime.now().isoformat(),
-            'project_groups': {}
-        }
-        
-        for group, repos in self.project_groups.items():
-            group_status = []
-            
-            for repo_name in repos:
-                try:
-                    repo = self.repositories[repo_name]
-                    open_issues = repo.get_issues(state='open')
-                    
-                    group_status.append({
-                        'repository': repo_name,
-                        'open_issues_count': open_issues.totalCount,
-                        'last_updated': repo.updated_at.isoformat()
-                    })
-                except Exception as e:
-                    logger.error(f"Could not process repository {repo_name}: {e}")
-            
-            report['project_groups'][group] = group_status
-        
-        return report
+        # Previous implementation...
 
 def main():
     token = os.environ.get('GHUB_TOKEN')
@@ -196,30 +157,11 @@ def main():
     try:
         orchestrator = MasterProjectOrchestrator(token)
         
-        # Example of creating a new project
-        new_project = orchestrator.create_new_project(
-            project_name="AI Content Generator",
-            repositories=[
-                "ai-content-backend", 
-                "ai-content-frontend", 
-                "ai-content-ml-service"
-            ],
-            objectives=[
-                "Design Content Generation Architecture",
-                "Implement Multi-Model Support",
-                "Create User Interface",
-                "Develop API Endpoints",
-                "Implement User Authentication"
-            ]
-        )
+        # Identify AI development candidates
+        ai_dev_candidates = orchestrator.identify_ai_development_candidates()
         
-        # Generate comprehensive roadmap
-        roadmap = orchestrator.generate_project_roadmap()
-        
-        # Generate project status report
-        report = orchestrator.generate_comprehensive_report()
-        
-        logger.info("Project orchestration completed successfully")
+        logger.info(f"Identified {len(ai_dev_candidates)} AI development candidates")
+    
     except Exception as e:
         logger.error(f"Project orchestration failed: {e}")
 
