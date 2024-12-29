@@ -19,9 +19,7 @@ def main():
 
     # Save results
     os.makedirs("reports/ai", exist_ok=True)
-    with open(
-        f'reports/ai/analysis_{datetime.now().strftime("%Y%m%d")}.json', "w"
-    ) as f:
+    with open(f'reports/ai/analysis_{datetime.now().strftime("%Y%m%d")}.json', "w") as f:
         json.dump(results, f, indent=2)
 
 

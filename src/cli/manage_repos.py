@@ -48,9 +48,7 @@ def list(category, status):
     try:
         repos = manager.list_repositories(category, status)
         for repo in repos:
-            click.echo(
-                f"{repo['name']} ({repo.get('category', 'uncategorized')}) - {repo.get('status', 'active')}"
-            )
+            click.echo(f"{repo['name']} ({repo.get('category', 'uncategorized')}) - {repo.get('status', 'active')}")
     except Exception as e:
         click.echo(f"Error: {str(e)}", err=True)
 

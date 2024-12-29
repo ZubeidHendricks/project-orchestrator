@@ -71,9 +71,7 @@ class TechnicalTools:
             assessment = {
                 "recent_activity": {
                     "commits": commits.totalCount,
-                    "active_days": len(
-                        set(c.commit.author.date.date() for c in commits)
-                    ),
+                    "active_days": len(set(c.commit.author.date.date() for c in commits)),
                 },
                 "languages": languages,
                 "open_issues": issues.totalCount,

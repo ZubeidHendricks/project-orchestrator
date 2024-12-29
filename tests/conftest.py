@@ -17,7 +17,5 @@ def sample_repository():
 def sample_status_report():
     return {
         "timestamp": datetime.now().isoformat(),
-        "repositories": {
-            "test-repo": {"open_issues": 5, "open_prs": 3, "last_commit": 10}
-        },
+        "repositories": {"test-repo": {"open_issues": 5, "open_prs": 3, "last_commit": 10}},
     }

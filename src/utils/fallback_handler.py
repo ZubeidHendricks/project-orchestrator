@@ -24,9 +24,7 @@ class FallbackHandler:
                 try:
                     llm = setup_func()
                     if llm:
-                        self.logger.info(
-                            f"Successfully set up fallback LLM: {llm_name}"
-                        )
+                        self.logger.info(f"Successfully set up fallback LLM: {llm_name}")
                         return llm
                 except Exception as e:
                     self.logger.warning(f"Failed to set up {llm_name}: {str(e)}")

@@ -34,9 +34,7 @@ class Developer(BaseModel):
     github_username: str
     level: DeveloperLevel
     expertise: DeveloperExpertise
-    max_workload: int = Field(
-        default=5, description="Maximum number of concurrent tasks"
-    )
+    max_workload: int = Field(default=5, description="Maximum number of concurrent tasks")
     current_projects: List[str] = Field(default_factory=list)
 
 

@@ -84,15 +84,9 @@ class ProjectRiskPredictor:
         health_report = {
             "timestamp": datetime.now().isoformat(),
             "overall_risk_assessment": {
-                "high_risk_issues": sum(
-                    1 for r in risk_predictions if r["predicted_risk"] == "high"
-                ),
-                "medium_risk_issues": sum(
-                    1 for r in risk_predictions if r["predicted_risk"] == "medium"
-                ),
-                "low_risk_issues": sum(
-                    1 for r in risk_predictions if r["predicted_risk"] == "low"
-                ),
+                "high_risk_issues": sum(1 for r in risk_predictions if r["predicted_risk"] == "high"),
+                "medium_risk_issues": sum(1 for r in risk_predictions if r["predicted_risk"] == "medium"),
+                "low_risk_issues": sum(1 for r in risk_predictions if r["predicted_risk"] == "low"),
             },
             "risk_details": risk_predictions,
         }

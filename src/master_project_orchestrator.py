@@ -8,9 +8,7 @@ from datetime import datetime
 from github import Github
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -47,9 +45,7 @@ class MasterProjectOrchestrator:
                 try:
                     self.repositories[repo_name] = self.gh.get_repo(full_repo_name)
                 except Exception as e:
-                    logger.error(
-                        f"Could not initialize repository {full_repo_name}: {e}"
-                    )
+                    logger.error(f"Could not initialize repository {full_repo_name}: {e}")
 
     def identify_ai_development_candidates(self):
         """Identify issues suitable for AI development"""
@@ -95,18 +91,12 @@ class MasterProjectOrchestrator:
 
         # Exclude issues that are already labeled or seem too vague
         exclusion_labels = ["bug", "documentation", "question"]
-        has_excluded_label = any(
-            label.name.lower() in exclusion_labels for label in issue.labels
-        )
+        has_excluded_label = any(label.name.lower() in exclusion_labels for label in issue.labels)
 
         # Minimum text length to ensure substantive issue
         min_text_length = 50
 
-        return (
-            keyword_match
-            and not has_excluded_label
-            and len(issue_text) >= min_text_length
-        )
+        return keyword_match and not has_excluded_label and len(issue_text) >= min_text_length
 
     def create_new_project(self, project_name, repositories, objectives):
         """Programmatically create a new project group with repositories and issues"""

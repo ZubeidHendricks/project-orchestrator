@@ -10,9 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -50,9 +48,7 @@ class AITaskAllocator:
                     # Extract skills from issue labels
                     for label in issue.labels:
                         skill = label.name.lower()
-                        developer_skills[dev_name][skill] = (
-                            developer_skills[dev_name].get(skill, 0) + 1
-                        )
+                        developer_skills[dev_name][skill] = developer_skills[dev_name].get(skill, 0) + 1
 
             # Log discovered developer skills
             logger.info("Discovered Developer Skills:")
@@ -80,9 +76,7 @@ class AITaskAllocator:
                 labels=project_issue.labels,
             )
 
-            logger.info(
-                f"Created issue #{new_issue.number} in ai-dev-orchestrator for {recommended_dev}"
-            )
+            logger.info(f"Created issue #{new_issue.number} in ai-dev-orchestrator for {recommended_dev}")
         except Exception as e:
             logger.error(f"Failed to create issue for {recommended_dev}: {e}")
 
@@ -104,9 +98,7 @@ class AITaskAllocator:
 
                     # Assign issue in project-orchestrator
                     issue.edit(assignee=recommended_dev)
-                    logger.info(
-                        f"Assigned Issue #{issue.number} '{issue.title}' to {recommended_dev}"
-                    )
+                    logger.info(f"Assigned Issue #{issue.number} '{issue.title}' to {recommended_dev}")
 
                     # Create mirroring issue in ai-dev-orchestrator
                     self.create_dev_issue(recommended_dev, issue)

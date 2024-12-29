@@ -31,9 +31,7 @@ class AlertManager:
         # Check open issues
         open_issues = repo.get_issues(state="open").totalCount
         if open_issues > self.thresholds["open_issues"]:
-            alerts.append(
-                {"type": "high_issues", "repo": repo.name, "count": open_issues}
-            )
+            alerts.append({"type": "high_issues", "repo": repo.name, "count": open_issues})
 
         # Check open PRs
         open_prs = repo.get_pulls(state="open").totalCount
@@ -69,9 +67,7 @@ class AlertManager:
             body += f"Count: {alert['count']}"
 
             # Create issue in the project-orchestrator repo
-            orchestrator_repo = self.github.get_repo(
-                "ZubeidHendricks/project-orchestrator"
-            )
+            orchestrator_repo = self.github.get_repo("ZubeidHendricks/project-orchestrator")
             orchestrator_repo.create_issue(title=title, body=body, labels=["alert"])
 
 

@@ -38,9 +38,9 @@ class VersionChecker:
 
             try:
                 installed_version = pkg_resources.get_distribution(package).version
-                meets_requirement = pkg_resources.parse_version(
-                    installed_version
-                ) >= pkg_resources.parse_version(required_version)
+                meets_requirement = pkg_resources.parse_version(installed_version) >= pkg_resources.parse_version(
+                    required_version
+                )
                 results[package] = meets_requirement
 
                 if not meets_requirement:

@@ -7,9 +7,7 @@ from datetime import datetime
 from github import Github
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -88,9 +86,7 @@ class RepositoryMonitor:
         os.makedirs("data/monitoring", exist_ok=True)
 
         # Save report
-        report_path = (
-            f'data/monitoring/report_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
-        )
+        report_path = f'data/monitoring/report_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
         with open(report_path, "w") as f:
             json.dump(report, f, indent=2)
 
@@ -111,9 +107,7 @@ def main():
         report = monitor.generate_comprehensive_report()
 
         # Print summary
-        print(
-            f"Monitored {len(report['repository_status']['repositories'])} repositories"
-        )
+        print(f"Monitored {len(report['repository_status']['repositories'])} repositories")
         print(f"Tracked {len(report['workflow_runs']['workflow_runs'])} workflow runs")
 
     except Exception as e:

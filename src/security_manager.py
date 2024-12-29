@@ -43,9 +43,7 @@ class SecurityManager:
 
         decrypted_events = []
         for event in encrypted_log["events"]:
-            decrypted_event = self.cipher_suite.decrypt(
-                event["encrypted_event"].encode()
-            )
+            decrypted_event = self.cipher_suite.decrypt(event["encrypted_event"].encode())
             decrypted_events.append(json.loads(decrypted_event))
 
         return decrypted_events

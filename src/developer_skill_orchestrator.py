@@ -100,25 +100,18 @@ class DeveloperSkillOrchestrator:
             # Extract languages and technologies
             languages = repo.get_languages()
             for lang, lines in languages.items():
-                language_skills[lang.lower()] = (
-                    language_skills.get(lang.lower(), 0) + lines
-                )
+                language_skills[lang.lower()] = language_skills.get(lang.lower(), 0) + lines
 
             # Match against tech categories
             for category, category_skills in tech_categories.items():
                 for skill in category_skills:
-                    if (
-                        skill in repo.name.lower()
-                        or skill in (repo.description or "").lower()
-                    ):
+                    if skill in repo.name.lower() or skill in (repo.description or "").lower():
                         tech_skills[skill] = tech_skills.get(skill, 0) + 1
 
         # Normalize and weight skills
         total_language_lines = sum(language_skills.values())
         skills = {
-            "languages": {
-                k: v / total_language_lines for k, v in language_skills.items()
-            },
+            "languages": {k: v / total_language_lines for k, v in language_skills.items()},
             "technologies": tech_skills,
         }
 
@@ -194,9 +187,7 @@ class DeveloperSkillOrchestrator:
             "kubernetes",
         ]
 
-        skills = [
-            skill for skill in skill_keywords if skill.lower() in description.lower()
-        ]
+        skills = [skill for skill in skill_keywords if skill.lower() in description.lower()]
 
         return skills
 
@@ -234,8 +225,7 @@ class DeveloperSkillOrchestrator:
 
         # Compute cosine similarity
         similarities = [
-            cosine_similarity(issue_skills_encoded, dev_skills)[0][0]
-            for dev_skills in developer_skill_matrices
+            cosine_similarity(issue_skills_encoded, dev_skills)[0][0] for dev_skills in developer_skill_matrices
         ]
 
         # Return developer with highest skill match

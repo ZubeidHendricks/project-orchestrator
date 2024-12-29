@@ -32,11 +32,7 @@ class IssueHandler:
 
     def get_best_assignee(self, issue_type):
         """Select best assignee based on workload and expertise"""
-        team_type = (
-            "devops_team"
-            if issue_type in ["pipeline_failures", "deployment_issues"]
-            else "developers"
-        )
+        team_type = "devops_team" if issue_type in ["pipeline_failures", "deployment_issues"] else "developers"
         team = self.team_config[team_type]
 
         # Get workload for each team member
@@ -51,10 +47,8 @@ class IssueHandler:
         # Select based on workload limits and expertise
         for member, workload in workloads.items():
             if (
-                workload["total"]
-                < self.team_config["workload_limits"]["max_open_issues"]
-                and workload["critical"]
-                < self.team_config["workload_limits"]["max_critical_issues"]
+                workload["total"] < self.team_config["workload_limits"]["max_open_issues"]
+                and workload["critical"] < self.team_config["workload_limits"]["max_critical_issues"]
             ):
                 return member
 

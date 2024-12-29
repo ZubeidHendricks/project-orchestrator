@@ -70,9 +70,7 @@ class AlertManager:
 
     def _save_alerts(self, alerts):
         os.makedirs(self.alerts_dir, exist_ok=True)
-        filename = (
-            f"{self.alerts_dir}/alerts_{datetime.now().strftime('%Y%m%d_%H%M')}.json"
-        )
+        filename = f"{self.alerts_dir}/alerts_{datetime.now().strftime('%Y%m%d_%H%M')}.json"
 
         with open(filename, "w") as f:
             json.dump(alerts, f, indent=2)

@@ -87,9 +87,7 @@ Assigned: {datetime.now().isoformat()}
         """Check progress of a specific issue"""
         try:
             # Find corresponding dev issue
-            dev_issues = self.dev_repo.get_issues(
-                state="all", labels=["ai-development"]
-            )
+            dev_issues = self.dev_repo.get_issues(state="all", labels=["ai-development"])
 
             for dev_issue in dev_issues:
                 if f"#{issue.number}" in dev_issue.body:
@@ -103,18 +101,12 @@ Assigned: {datetime.now().isoformat()}
         """Update progress based on dev issue status"""
         if dev_issue.state == "closed":
             # Check if PR was created and merged
-            linked_prs = [
-                pr
-                for pr in self.dev_repo.get_pulls(state="all")
-                if f"#{dev_issue.number}" in pr.body
-            ]
+            linked_prs = [pr for pr in self.dev_repo.get_pulls(state="all") if f"#{dev_issue.number}" in pr.body]
 
             if linked_prs and linked_prs[0].merged:
                 project_issue.add_to_labels("development-completed")
                 project_issue.remove_from_labels("needs-development")
-                project_issue.create_comment(
-                    f"Development completed! PR: {linked_prs[0].html_url}"
-                )
+                project_issue.create_comment(f"Development completed! PR: {linked_prs[0].html_url}")
 
     def _log_assignment(self, project_issue, dev_issue):
         """Log the assignment for tracking"""

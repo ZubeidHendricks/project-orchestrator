@@ -31,9 +31,7 @@ class GitHubSettings(BaseSettings):
 
 
 class TeamSettings(BaseSettings):
-    max_workload_per_dev: int = Field(
-        5, description="Maximum concurrent tasks per developer"
-    )
+    max_workload_per_dev: int = Field(5, description="Maximum concurrent tasks per developer")
     default_review_timeout: int = Field(24, description="Hours before review reminder")
     auto_assign: bool = Field(True, description="Enable automatic task assignment")
 
@@ -59,9 +57,7 @@ class Settings(BaseSettings):
 def get_settings() -> Settings:
     """Load and validate settings"""
     return Settings(
-        llm=LLMSettings(
-            model_path=os.getenv("LLAMA_MODEL_PATH", "models/llama-2-70b-chat.gguf")
-        ),
+        llm=LLMSettings(model_path=os.getenv("LLAMA_MODEL_PATH", "models/llama-2-70b-chat.gguf")),
         github=GitHubSettings(token=os.getenv("GHUB_TOKEN")),
         team=TeamSettings(),
     )

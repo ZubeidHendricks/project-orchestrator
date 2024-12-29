@@ -3,9 +3,7 @@ from typing import List, Optional
 
 from github import Github
 
-from src.models.project_models import (Developer, Project, ProjectIssue,
-                                       ProjectMetrics, ProjectStatus,
-                                       ProjectType)
+from src.models.project_models import Developer, Project, ProjectIssue, ProjectMetrics, ProjectStatus, ProjectType
 
 
 class ProjectService:

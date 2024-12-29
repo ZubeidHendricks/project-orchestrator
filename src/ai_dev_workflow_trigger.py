@@ -14,15 +14,10 @@ class AIDevWorkflowTrigger:
     def find_unprocessed_issues(self):
         """Find issues in project-orchestrator that haven't been processed by AI dev"""
         unprocessed_issues = []
-        for issue in self.project_repo.get_issues(
-            state="open", labels=["ai-development"]
-        ):
+        for issue in self.project_repo.get_issues(state="open", labels=["ai-development"]):
             try:
                 # Check if issue has already been processed
-                processed = any(
-                    "Processed by AI Dev" in comment.body
-                    for comment in issue.get_comments()
-                )
+                processed = any("Processed by AI Dev" in comment.body for comment in issue.get_comments())
 
                 if not processed:
                     unprocessed_issues.append(issue)
@@ -48,10 +43,7 @@ class AIDevWorkflowTrigger:
             workflow_file.create_dispatch(ref="main", inputs=workflow_inputs)
 
             # Add comment to original issue
-            issue.create_comment(
-                "🤖 AI Development workflow triggered. "
-                "Processing started in ai-dev-orchestrator."
-            )
+            issue.create_comment("🤖 AI Development workflow triggered. " "Processing started in ai-dev-orchestrator.")
 
             print(f"Triggered workflow for issue {issue.number}: {issue.title}")
 

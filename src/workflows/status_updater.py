@@ -37,9 +37,7 @@ class StatusUpdater:
         if not os.path.exists(self.base_path):
             os.makedirs(self.base_path)
 
-        filename = (
-            f"{self.base_path}/status_{datetime.now().strftime('%Y%m%d_%H%M')}.json"
-        )
+        filename = f"{self.base_path}/status_{datetime.now().strftime('%Y%m%d_%H%M')}.json"
         with open(filename, "w") as f:
             json.dump(report, f, indent=2)
 
