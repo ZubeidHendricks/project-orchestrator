@@ -1,36 +1,20 @@
-name: Monitoring Workflow
+name: Project Monitoring Workflow
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */2 * * *'  # Every 2 hours
+    - cron: '0 */4 * * *'  # Run every 4 hours
 
 jobs:
-  monitoring:
+  monitor-projects:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      packages: read
+      contents: read
+      issues: write
     
     steps:
-    - name: Debug Git Configuration
-      run: |
-        git config --list
-        env | grep -i git
-        echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
-    
-    - name: Checkout repository
+    - name: Checkout Repository
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        fetch-depth: 0
-    
-    - name: Diagnose Checkout
-      run: |
-        pwd
-        ls -la
-        git remote -v
-        git branch -a
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -42,22 +26,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
-    - name: Configure Git
+    - name: Run Project Monitoring
       run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        python src/monitoring/monitor.py
     
-    - name: Run Monitoring
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Run DevOps Monitoring
       run: |
-        python src/monitoring.py
+        python src/monitoring/devops_monitor.py
     
-    - name: Commit and Push Changes
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Check Alerts
       run: |
-        git add .
-        git commit -m 'Update monitoring data' || echo 'No changes to commit'
-        git push origin HEAD:main
+        python src/monitoring/issue_handler.py
+    
+    - name: Manage Alerts
+      run: |
+        python src/monitoring/alert_manager.py
