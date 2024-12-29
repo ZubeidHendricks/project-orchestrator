@@ -13,10 +13,24 @@ jobs:
       packages: read
     
     steps:
+    - name: Debug Git Configuration
+      run: |
+        git config --list
+        env | grep -i git
+        echo "GITHUB_REPOSITORY: $GITHUB_REPOSITORY"
+    
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Fetch full history
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: Diagnose Checkout
+      run: |
+        pwd
+        ls -la
+        git remote -v
+        git branch -a
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -30,33 +44,15 @@ jobs:
     
     - name: Configure Git
       run: |
-        git config --global user.name 'GitHub Action'
-        git config --global user.email 'action@github.com'
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
     
     - name: Run Monitoring
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
       run: |
         python src/monitoring.py
-    
-    - name: Check Alerts
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        python src/check_alerts.py
-    
-    - name: Update Dashboard
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        python src/update_dashboard.py
-    
-    - name: Save Monitoring Data
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        python src/save_monitoring_data.py
     
     - name: Commit and Push Changes
       env:
@@ -64,4 +60,4 @@ jobs:
       run: |
         git add .
         git commit -m 'Update monitoring data' || echo 'No changes to commit'
-        git push
+        git push origin HEAD:main
