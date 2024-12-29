@@ -16,7 +16,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GHUB_TOKEN }}
+        fetch-depth: 0  # Fetch full history
     
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -28,28 +28,40 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     
+    - name: Configure Git
+      run: |
+        git config --global user.name 'GitHub Action'
+        git config --global user.email 'action@github.com'
+    
     - name: Run Monitoring
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
       run: |
         python src/monitoring.py
     
     - name: Check Alerts
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         python src/check_alerts.py
     
     - name: Update Dashboard
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         python src/update_dashboard.py
     
     - name: Save Monitoring Data
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         python src/save_monitoring_data.py
     
     - name: Commit and Push Changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git config user.name 'GitHub Action'
-        git config user.email 'action@github.com'
         git add .
         git commit -m 'Update monitoring data' || echo 'No changes to commit'
         git push
