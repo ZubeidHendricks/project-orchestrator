@@ -1,5 +1,3 @@
-import json
-import os
 from unittest.mock import Mock, patch
 
 import pytest
@@ -18,27 +16,27 @@ class TestRepositoryManager:
             yield mock
 
     def test_add_repository(self, manager, mock_github):
-        repo_url = "https://github.com/test/repo"
-        mock_repo = Mock()
+# repo_url
+# mock_repo
         mock_github.return_value.get_repo.return_value = mock_repo
 
-        result = manager.add_repository(repo_url, "test-category")
+# result
 
         assert result["name"] == "repo"
         assert result["category"] == "test-category"
 
     def test_list_repositories(self, manager):
-        repos = manager.list_repositories()
+# repos
         assert isinstance(repos, list)
 
     def test_remove_repository(self, manager):
         # First add a repo
-        repo_url = "https://github.com/test/repo-to-remove"
+# repo_url
         manager.add_repository(repo_url)
 
         # Then remove it
         manager.remove_repository("repo-to-remove")
 
         # Verify it's gone
-        repos = manager.list_repositories()
+# repos
         assert not any(r["name"] == "repo-to-remove" for r in repos)

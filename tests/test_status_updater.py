@@ -12,13 +12,13 @@ class TestStatusUpdater:
 
     @patch("github.Github")
     def test_analyze_repository(self, mock_github):
-        mock_repo = Mock()
+# mock_repo
         mock_repo.get_issues().totalCount = 5
         mock_repo.get_pulls().totalCount = 2
         mock_repo.get_commits().totalCount = 10
 
-        updater = StatusUpdater()
-        result = updater.analyze_repository(mock_repo)
+# updater
+# result
 
         assert "open_issues" in result
         assert "open_prs" in result

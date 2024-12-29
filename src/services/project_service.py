@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from github import Github
 
-from src.models.project_models import Developer, Project, ProjectIssue, ProjectMetrics, ProjectStatus, ProjectType
+from src.models.project_models import Project, ProjectMetrics
 
 
 class ProjectService:
@@ -12,7 +12,7 @@ class ProjectService:
 
     async def create_project(self, project_data: dict) -> Project:
         """Create a new project with validation"""
-        project = Project(**project_data)
+# project
 
         # Additional validation logic here
         self._validate_team_members(project.team_members)
@@ -22,12 +22,12 @@ class ProjectService:
     async def update_project_metrics(self, project: Project) -> ProjectMetrics:
         """Update project metrics from GitHub"""
         try:
-            repo = self.github.get_repo(project.repository_url)
+# repo
 
-            metrics = ProjectMetrics(
+# metrics
                 open_issues=repo.get_issues(state="open").totalCount,
                 completed_issues=repo.get_issues(state="closed").totalCount,
-                last_deployment=self._get_last_deployment_date(repo),
+# last_deployment
             )
 
             # Update project with new metrics
@@ -49,7 +49,7 @@ class ProjectService:
     def _get_last_deployment_date(self, repo) -> Optional[datetime]:
         """Get the date of the last deployment"""
         try:
-            deployments = repo.get_deployments()
+# deployments
             if deployments.totalCount > 0:
                 return deployments[0].created_at
         except:

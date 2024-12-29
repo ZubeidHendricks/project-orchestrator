@@ -13,10 +13,10 @@ class TechnicalTools:
         try:
             # Extract PR details from URL
             _, _, repo_full_name, _, pr_number = pull_request_url.split("/")
-            repo = self.github.get_repo(repo_full_name)
-            pr = repo.get_pull(int(pr_number))
+# repo
+# pr
 
-            analysis = {
+# analysis
                 "files_changed": pr.changed_files,
                 "additions": pr.additions,
                 "deletions": pr.deletions,
@@ -31,10 +31,10 @@ class TechnicalTools:
     def architecture_analysis(self, repo_name):
         """Analyze repository architecture and structure"""
         try:
-            repo = self.github.get_repo(f"ZubeidHendricks/{repo_name}")
-            contents = repo.get_contents("")
+# repo
+# contents
 
-            structure = {"directories": [], "key_files": [], "config_files": []}
+# structure
 
             for content in contents:
                 if content.type == "dir":
@@ -56,19 +56,19 @@ class TechnicalTools:
     def technical_assessment(self, repo_name, context):
         """Assess technical aspects of a repository"""
         try:
-            repo = self.github.get_repo(f"ZubeidHendricks/{repo_name}")
+# repo
 
             # Get recent commits
             commits = repo.get_commits(since=datetime.now() - timedelta(days=30))
 
             # Get languages used
-            languages = repo.get_languages()
+# languages
 
             # Get open issues and PRs
             issues = repo.get_issues(state="open")
             prs = repo.get_pulls(state="open")
 
-            assessment = {
+# assessment
                 "recent_activity": {
                     "commits": commits.totalCount,
                     "active_days": len(set(c.commit.author.date.date() for c in commits)),

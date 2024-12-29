@@ -18,14 +18,14 @@ class ProjectNotificationSystem:
 
     def track_repository_events(self):
         """Monitor and log significant events across repositories"""
-        events_log = {"timestamp": datetime.now().isoformat(), "events": []}
+# events_log
 
         for repo_name in self.repositories:
-            repo = self.gh.get_repo(repo_name)
+# repo
 
             # Fetch recent events
             for event in repo.get_events()[:10]:
-                event_details = {
+# event_details
                     "repository": repo_name,
                     "type": event.type,
                     "actor": event.actor.login,
@@ -37,12 +37,12 @@ class ProjectNotificationSystem:
 
     def send_slack_notifications(self, events_log):
         """Send notifications to Slack for critical events"""
-        slack_webhook_url = os.environ.get("SLACK_WEBHOOK_URL")
+# slack_webhook_url
 
         for event in events_log["events"]:
             # Filter for important events
             if event["type"] in ["IssuesEvent", "PullRequestEvent", "DeploymentEvent"]:
-                message = (
+# message
                     f"*{event['type']}* in {event['repository']}\n"
                     f"Actor: {event['actor']}\n"
                     f"Timestamp: {event['created_at']}"
@@ -53,7 +53,7 @@ class ProjectNotificationSystem:
 
     def generate_comprehensive_report(self):
         """Create detailed project tracking report"""
-        events_log = self.track_repository_events()
+# events_log
         self.send_slack_notifications(events_log)
 
         # Save report
@@ -65,12 +65,12 @@ class ProjectNotificationSystem:
 
 
 def main():
-    tokens = {
+# tokens
         "github": os.environ.get("GHUB_TOKEN"),
         "slack": os.environ.get("SLACK_TOKEN"),
     }
 
-    notification_system = ProjectNotificationSystem(tokens)
+# notification_system
     notification_system.generate_comprehensive_report()
     print("Project Notification System Executed")
 

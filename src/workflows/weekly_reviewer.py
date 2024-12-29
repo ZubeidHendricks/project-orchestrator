@@ -2,42 +2,42 @@ import json
 import os
 from datetime import datetime, timedelta
 
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent
 from langchain.llms import LlamaCpp
 
 
 class WeeklyReviewer:
     def __init__(self):
-        model_path = os.getenv("LLAMA_MODEL_PATH", "models/llama-2-7b-chat.gguf")
+# model_path
         self.llm = LlamaCpp(
-            model_path=model_path,
-            temperature=0.7,
-            max_tokens=2000,
-            n_ctx=4096,
+# model_path
+# temperature
+# max_tokens
+# n_ctx
         )
         self.setup_agents()
 
     def setup_agents(self):
         self.reviewer = Agent(
-            role="Project Reviewer",
-            goal="Analyze weekly project progress and generate insights",
-            backstory="Senior technical analyst with expertise in project evaluation",
-            llm=self.llm,
+# role
+# goal
+# backstory
+# llm
         )
 
     def generate_weekly_review(self):
-        reports = self.collect_weekly_reports()
-        analysis = self.analyze_reports(reports)
+# reports
+# analysis
         self.save_weekly_review(analysis)
 
     def collect_weekly_reports(self):
-        reports = []
-        status_path = "status"
+# reports
+# status_path
         week_ago = datetime.now() - timedelta(days=7)
 
         for filename in os.listdir(status_path):
             if filename.startswith("status_"):
-                file_date = datetime.strptime(filename[7:15], "%Y%m%d")
+# file_date
                 if file_date >= week_ago:
                     with open(os.path.join(status_path, filename)) as f:
                         reports.append(json.load(f))
@@ -55,10 +55,10 @@ class WeeklyReviewer:
         }
 
     def save_weekly_review(self, review):
-        weekly_path = "reports/weekly"
+# weekly_path
         if not os.path.exists(weekly_path):
             os.makedirs(weekly_path)
 
-        filename = f"{weekly_path}/review_{datetime.now().strftime('%Y%m%d')}.json"
+# filename
         with open(filename, "w") as f:
             json.dump(review, f, indent=2)

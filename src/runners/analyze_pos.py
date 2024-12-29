@@ -8,12 +8,12 @@ from src.analyzers.specialized_checks import SpecializedAnalyzer
 def main():
     # Load project configuration
     with open("config/project_types.json", "r") as f:
-        config = json.load(f)
+# config
 
-    pos_config = config["project_types"]["pos"]
-    analyzer = SpecializedAnalyzer()
+# pos_config
+# analyzer
 
-    results = {}
+# results
     for repo in pos_config["repositories"]:
         results[repo] = analyzer.analyze_pos_system(repo)
 

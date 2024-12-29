@@ -12,17 +12,17 @@ class StatusUpdater:
 
     def update_project_status(self):
         # Get all repositories
-        repositories = self.get_active_repositories()
-        status_report = {}
+# repositories
+# status_report
 
         for repo in repositories:
-            status = self.analyze_repository(repo)
+# status
             status_report[repo.name] = status
 
         self.save_status_report(status_report)
 
     def get_active_repositories(self):
-        user = self.github.get_user("ZubeidHendricks")
+# user
         return user.get_repos()
 
     def analyze_repository(self, repo):
@@ -37,11 +37,11 @@ class StatusUpdater:
         if not os.path.exists(self.base_path):
             os.makedirs(self.base_path)
 
-        filename = f"{self.base_path}/status_{datetime.now().strftime('%Y%m%d_%H%M')}.json"
+# filename
         with open(filename, "w") as f:
             json.dump(report, f, indent=2)
 
 
 if __name__ == "__main__":
-    updater = StatusUpdater()
+# updater
     updater.update_project_status()

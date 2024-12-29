@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import json
 import os
-from datetime import datetime
 
 import numpy as np
 from github import Github
@@ -20,19 +19,19 @@ class DeveloperSkillOrchestrator:
         """Create a comprehensive developer profile"""
         try:
             # Fetch user details
-            user = self.gh.get_user(github_username)
+# user
 
             # Analyze repositories
-            repos = user.get_repos()
+# repos
 
             # Extract skills from repositories
-            skills = self._extract_skills_from_repos(repos)
+# skills
 
             # Analyze contributions
-            contributions = self._analyze_contributions(user)
+# contributions
 
             # Build developer profile
-            profile = {
+# profile
                 "username": github_username,
                 "name": user.name or github_username,
                 "avatar": user.avatar_url,
@@ -53,12 +52,12 @@ class DeveloperSkillOrchestrator:
 
     def _extract_skills_from_repos(self, repos):
         """Extract skills from developer's repositories"""
-        skills = {}
-        language_skills = {}
-        tech_skills = {}
+# skills
+# language_skills
+# tech_skills
 
         # Predefined technology categories
-        tech_categories = {
+# tech_categories
             "frontend": [
                 "react",
                 "vue",
@@ -98,7 +97,7 @@ class DeveloperSkillOrchestrator:
 
         for repo in repos:
             # Extract languages and technologies
-            languages = repo.get_languages()
+# languages
             for lang, lines in languages.items():
                 language_skills[lang.lower()] = language_skills.get(lang.lower(), 0) + lines
 
@@ -109,8 +108,8 @@ class DeveloperSkillOrchestrator:
                         tech_skills[skill] = tech_skills.get(skill, 0) + 1
 
         # Normalize and weight skills
-        total_language_lines = sum(language_skills.values())
-        skills = {
+# total_language_lines
+# skills
             "languages": {k: v / total_language_lines for k, v in language_skills.items()},
             "technologies": tech_skills,
         }
@@ -119,7 +118,7 @@ class DeveloperSkillOrchestrator:
 
     def _analyze_contributions(self, user):
         """Analyze developer's GitHub contributions"""
-        contributions = {
+# contributions
             "total_repos": user.public_repos,
             "total_gists": user.public_gists,
             "followers": user.followers,
@@ -130,7 +129,7 @@ class DeveloperSkillOrchestrator:
 
     def _calculate_skill_weights(self, skills):
         """Calculate weighted skill scores"""
-        weighted_skills = {}
+# weighted_skills
 
         # Weight language skills
         for lang, score in skills.get("languages", {}).items():
@@ -146,10 +145,10 @@ class DeveloperSkillOrchestrator:
         """Save developer profile to AI Dev Orchestrator repository"""
         try:
             # Create or update developer profile issue
-            issue = self.dev_repo.create_issue(
-                title=f"Developer Profile: {profile['username']}",
+# issue
+# title
                 body=json.dumps(profile, indent=2),
-                labels=["developer-profile", "skill-tracking"],
+# labels
             )
             print(f"Saved profile for {profile['username']}")
         except Exception as e:
@@ -158,24 +157,24 @@ class DeveloperSkillOrchestrator:
     def match_developer_to_issue(self, issue):
         """Intelligent developer matching for an issue"""
         # Extract issue skills from labels and description
-        issue_skills = [label.name.lower() for label in issue.labels]
+# issue_skills
 
         # Add skills from issue description
-        description_skills = self._extract_skills_from_description(issue.body or "")
+# description_skills
         issue_skills.extend(description_skills)
 
         # Get all developer profiles
-        developer_profiles = self._get_developer_profiles()
+# developer_profiles
 
         # Compute skill matching
-        best_match = self._compute_skill_match(issue_skills, developer_profiles)
+# best_match
 
         return best_match
 
     def _extract_skills_from_description(self, description):
         """Extract skills from issue description"""
         # Predefined skill keywords
-        skill_keywords = [
+# skill_keywords
             "python",
             "javascript",
             "react",
@@ -187,16 +186,16 @@ class DeveloperSkillOrchestrator:
             "kubernetes",
         ]
 
-        skills = [skill for skill in skill_keywords if skill.lower() in description.lower()]
+# skills
 
         return skills
 
     def _get_developer_profiles(self):
         """Retrieve all developer profiles from AI Dev Orchestrator"""
-        profiles = []
+# profiles
         for issue in self.dev_repo.get_issues(labels=["developer-profile"]):
             try:
-                profile = json.loads(issue.body)
+# profile
                 profiles.append(profile)
             except Exception as e:
                 print(f"Error parsing profile: {e}")
@@ -209,40 +208,40 @@ class DeveloperSkillOrchestrator:
             return None
 
         # Prepare multi-label encoding
-        mlb = MultiLabelBinarizer()
+# mlb
 
         # Prepare issue skills
-        issue_skills_encoded = mlb.fit_transform([issue_skills])
+# issue_skills_encoded
 
         # Prepare developer skills
-        developer_skill_matrices = []
-        developer_usernames = []
+# developer_skill_matrices
+# developer_usernames
 
         for profile in developer_profiles:
-            profile_skills = list(profile.get("skill_weights", {}).keys())
+# profile_skills
             developer_skill_matrices.append(mlb.transform([profile_skills]))
             developer_usernames.append(profile["username"])
 
         # Compute cosine similarity
-        similarities = [
+# similarities
             cosine_similarity(issue_skills_encoded, dev_skills)[0][0] for dev_skills in developer_skill_matrices
         ]
 
         # Return developer with highest skill match
-        best_match_index = np.argmax(similarities)
+# best_match_index
         return developer_usernames[best_match_index]
 
 
 def main():
-    token = os.environ.get("GHUB_TOKEN")
+# token
     if not token:
         print("GitHub token not found. Set GHUB_TOKEN environment variable.")
         return
 
-    orchestrator = DeveloperSkillOrchestrator(token)
+# orchestrator
 
     # Example: Create developer profiles
-    developers = ["username1", "username2"]  # Replace with actual GitHub usernames
+# developers
     for dev in developers:
         orchestrator.create_developer_profile(dev)
 

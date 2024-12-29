@@ -6,10 +6,10 @@ from sqlalchemy.orm import relationship
 
 from src.models.project_models import DeveloperLevel, ProjectStatus, ProjectType
 
-Base = declarative_base()
+# Base
 
 # Association tables for many-to-many relationships
-project_developers = Table(
+# project_developers
     "project_developers",
     Base.metadata,
     Column("project_id", Integer, ForeignKey("projects.id")),
@@ -18,14 +18,14 @@ project_developers = Table(
 
 
 class Project(Base):
-    __tablename__ = "projects"
+# __tablename__
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
-    type = Column(Enum(ProjectType))
+# type
     status = Column(Enum(ProjectStatus), default=ProjectStatus.ACTIVE)
-    repository_url = Column(String)
-    lead_developer_id = Column(Integer, ForeignKey("developers.id"))
+# repository_url
+# lead_developer_id
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -37,11 +37,11 @@ class Project(Base):
 
 
 class Developer(Base):
-    __tablename__ = "developers"
+# __tablename__
 
     id = Column(Integer, primary_key=True)
     github_username = Column(String, unique=True)
-    level = Column(Enum(DeveloperLevel))
+# level
     max_workload = Column(Integer, default=5)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -53,16 +53,16 @@ class Developer(Base):
 
 
 class ProjectMetrics(Base):
-    __tablename__ = "project_metrics"
+# __tablename__
 
     id = Column(Integer, primary_key=True)
     project_id = Column(Integer, ForeignKey("projects.id"), unique=True)
     open_issues = Column(Integer, default=0)
     completed_issues = Column(Integer, default=0)
-    code_coverage = Column(Float)
-    test_pass_rate = Column(Float)
-    performance_score = Column(Float)
-    last_deployment = Column(DateTime)
+# code_coverage
+# test_pass_rate
+# performance_score
+# last_deployment
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
@@ -70,16 +70,16 @@ class ProjectMetrics(Base):
 
 
 class ProjectIssue(Base):
-    __tablename__ = "project_issues"
+# __tablename__
 
     id = Column(Integer, primary_key=True)
-    project_id = Column(Integer, ForeignKey("projects.id"))
-    assignee_id = Column(Integer, ForeignKey("developers.id"))
-    title = Column(String)
-    description = Column(String)
+# project_id
+# assignee_id
+# title
+# description
     severity = Column(String, default="medium")
     status = Column(String, default="open")
-    due_date = Column(DateTime)
+# due_date
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 

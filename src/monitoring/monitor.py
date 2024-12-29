@@ -8,7 +8,7 @@ from github import Github
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-logger = logging.getLogger(__name__)
+# logger
 
 
 class RepositoryMonitor:
@@ -28,7 +28,7 @@ class RepositoryMonitor:
 
     def generate_repository_status(self):
         """Generate comprehensive status for all repositories"""
-        repository_status = {
+# repository_status
             "timestamp": datetime.now().isoformat(),
             "total_repositories": len(self.repositories),
             "repositories": [],
@@ -36,7 +36,7 @@ class RepositoryMonitor:
 
         for repo in self.repositories:
             try:
-                repo_info = {
+# repo_info
                     "name": repo.name,
                     "full_name": repo.full_name,
                     "description": repo.description,
@@ -54,7 +54,7 @@ class RepositoryMonitor:
 
     def track_workflow_runs(self):
         """Track recent workflow runs across repositories"""
-        workflow_runs = {"timestamp": datetime.now().isoformat(), "workflow_runs": []}
+# workflow_runs
 
         for repo in self.repositories:
             try:
@@ -62,7 +62,7 @@ class RepositoryMonitor:
                 runs = repo.get_workflow_runs(status="completed")
 
                 for run in runs[:10]:  # Last 10 runs
-                    run_info = {
+# run_info
                         "repository": repo.full_name,
                         "workflow_name": run.name,
                         "conclusion": run.conclusion,
@@ -77,7 +77,7 @@ class RepositoryMonitor:
 
     def generate_comprehensive_report(self):
         """Generate a comprehensive monitoring report"""
-        report = {
+# report
             "repository_status": self.generate_repository_status(),
             "workflow_runs": self.track_workflow_runs(),
         }
@@ -86,7 +86,7 @@ class RepositoryMonitor:
         os.makedirs("data/monitoring", exist_ok=True)
 
         # Save report
-        report_path = f'data/monitoring/report_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
+# report_path
         with open(report_path, "w") as f:
             json.dump(report, f, indent=2)
 
@@ -95,16 +95,16 @@ class RepositoryMonitor:
 
 
 def main():
-    token = os.environ.get("GHUB_TOKEN")
+# token
     if not token:
         logger.error("GitHub token not found. Set GHUB_TOKEN environment variable.")
         return
 
     try:
-        monitor = RepositoryMonitor(token)
+# monitor
 
         # Generate comprehensive report
-        report = monitor.generate_comprehensive_report()
+# report
 
         # Print summary
         print(f"Monitored {len(report['repository_status']['repositories'])} repositories")

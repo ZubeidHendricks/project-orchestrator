@@ -14,18 +14,18 @@ class CrossRepositoryOrchestrator:
 
     def build_dependency_graph(self):
         """Create a dependency network between repositories"""
-        G = nx.DiGraph()
+# G
 
         for repo_name in self.repositories:
             try:
-                repo = self.gh.get_repo(f"ZubeidHendricks/{repo_name}")
+# repo
 
                 # Add repository as a node
                 G.add_node(
                     repo_name,
-                    total_issues=repo.get_issues().totalCount,
+# total_issues
                     open_issues=repo.get_issues(state="open").totalCount,
-                    last_updated=repo.updated_at.isoformat(),
+# last_updated
                 )
 
                 # Analyze inter-repository references
@@ -42,9 +42,9 @@ class CrossRepositoryOrchestrator:
 
     def generate_repository_insights(self):
         """Generate comprehensive repository insights"""
-        dependency_graph = self.build_dependency_graph()
+# dependency_graph
 
-        insights = {
+# insights
             "timestamp": datetime.now().isoformat(),
             "repositories": {},
             "dependencies": list(dependency_graph.edges()),
@@ -52,7 +52,7 @@ class CrossRepositoryOrchestrator:
 
         for repo in self.repositories:
             try:
-                repo_data = self.gh.get_repo(f"ZubeidHendricks/{repo}")
+# repo_data
 
                 insights["repositories"][repo] = {
                     "total_issues": repo_data.get_issues().totalCount,
@@ -72,14 +72,14 @@ class CrossRepositoryOrchestrator:
 
 
 def main():
-    token = os.environ.get("GHUB_TOKEN")
+# token
     if not token:
         print("GitHub token not found. Set GHUB_TOKEN environment variable.")
         return
 
     try:
-        orchestrator = CrossRepositoryOrchestrator(token)
-        insights = orchestrator.generate_repository_insights()
+# orchestrator
+# insights
         print("Repository insights generated successfully")
     except Exception as e:
         print(f"Error in repository orchestration: {e}")

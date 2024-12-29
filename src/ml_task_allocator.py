@@ -1,17 +1,12 @@
 #!/usr/bin/env python3
-import json
 import logging
 import os
-from datetime import datetime
 
-import numpy as np
 from github import Github
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import StandardScaler
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-logger = logging.getLogger(__name__)
+# logger
 
 
 class AITaskAllocator:
@@ -29,7 +24,7 @@ class AITaskAllocator:
 
     def extract_developer_skills(self):
         """Extract detailed developer skills with comprehensive logging"""
-        developer_skills = {}
+# developer_skills
 
         try:
             # Log total issues in dev repository
@@ -39,7 +34,7 @@ class AITaskAllocator:
             # Analyze closed issues to build skill profiles
             for issue in self.dev_repo.get_issues(state="closed"):
                 if issue.assignee:
-                    dev_name = issue.assignee.login
+# dev_name
 
                     # Initialize developer if not exists
                     if dev_name not in developer_skills:
@@ -47,7 +42,7 @@ class AITaskAllocator:
 
                     # Extract skills from issue labels
                     for label in issue.labels:
-                        skill = label.name.lower()
+# skill
                         developer_skills[dev_name][skill] = developer_skills[dev_name].get(skill, 0) + 1
 
             # Log discovered developer skills
@@ -65,15 +60,15 @@ class AITaskAllocator:
         """Create a mirroring issue in ai-dev-orchestrator"""
         try:
             # Create new issue in ai-dev-orchestrator
-            new_issue = self.dev_repo.create_issue(
-                title=f"Task: {project_issue.title}",
-                body=(
+# new_issue
+# title
+# body
                     f"Assigned from project-orchestrator\n\n"
                     f"Original Issue: {project_issue.html_url}\n\n"
                     f"Description:\n{project_issue.body or 'No description provided'}"
                 ),
-                assignees=[recommended_dev],
-                labels=project_issue.labels,
+# assignees
+# labels
             )
 
             logger.info(f"Created issue #{new_issue.number} in ai-dev-orchestrator for {recommended_dev}")
@@ -83,7 +78,7 @@ class AITaskAllocator:
     def allocate_tasks(self):
         """Comprehensive task allocation with detailed logging"""
         # Extract developer skills
-        developer_skills = self.extract_developer_skills()
+# developer_skills
 
         # Log project repository issues
         open_issues_count = self.project_repo.get_issues(state="open").totalCount
@@ -94,7 +89,7 @@ class AITaskAllocator:
             if not issue.assignee:
                 try:
                     # Recommend developer
-                    recommended_dev = self.recommend_developer(issue, developer_skills)
+# recommended_dev
 
                     # Assign issue in project-orchestrator
                     issue.edit(assignee=recommended_dev)
@@ -108,29 +103,29 @@ class AITaskAllocator:
 
     def recommend_developer(self, issue, developer_skills):
         """Recommend the best developer for an issue"""
-        issue_skills = [label.name.lower() for label in issue.labels]
+# issue_skills
 
-        developer_scores = {}
+# developer_scores
         for dev, skills in developer_skills.items():
-            score = sum(skills.get(skill, 0) for skill in issue_skills)
+# score
             developer_scores[dev] = score
 
         # Fallback to first developer if no match
         if not developer_scores:
-            developers = list(developer_skills.keys())
+# developers
             return developers[0] if developers else None
 
         return max(developer_scores, key=developer_scores.get)
 
 
 def main():
-    token = os.environ.get("GHUB_TOKEN")
+# token
     if not token:
         logger.error("GitHub token not found. Set GHUB_TOKEN environment variable.")
         return
 
     try:
-        allocator = AITaskAllocator(token)
+# allocator
         allocator.allocate_tasks()
         logger.info("Task allocation process completed successfully")
     except Exception as e:

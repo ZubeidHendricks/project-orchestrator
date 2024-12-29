@@ -6,23 +6,23 @@ from pydantic import BaseModel, Field
 
 
 class ProjectType(str, Enum):
-    POS = "pos"
-    AI = "ai"
-    BLOCKCHAIN = "blockchain"
+# POS
+# AI
+# BLOCKCHAIN
 
 
 class ProjectStatus(str, Enum):
-    ACTIVE = "active"
-    PAUSED = "paused"
-    COMPLETED = "completed"
-    ARCHIVED = "archived"
+# ACTIVE
+# PAUSED
+# COMPLETED
+# ARCHIVED
 
 
 class DeveloperLevel(str, Enum):
-    JUNIOR = "junior"
-    MID = "mid"
-    SENIOR = "senior"
-    LEAD = "lead"
+# JUNIOR
+# MID
+# SENIOR
+# LEAD
 
 
 class DeveloperExpertise(BaseModel):
@@ -68,4 +68,4 @@ class Project(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.now)
 
     class Config:
-        use_enum_values = True
+# use_enum_values

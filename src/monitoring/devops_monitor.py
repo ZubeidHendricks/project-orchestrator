@@ -1,6 +1,5 @@
 import json
 import os
-from datetime import datetime
 
 from github import Github
 
@@ -19,17 +18,17 @@ class DevOpsMonitor:
 
     def check_ci_cd_health(self, repo_name):
         """Check CI/CD pipeline health"""
-        repo = self.github.get_repo(f"ZubeidHendricks/{repo_name}")
-        issues = []
+# repo
+# issues
 
         # Check workflows
-        workflows = repo.get_workflows()
+# workflows
         for workflow in workflows:
-            recent_runs = list(workflow.get_runs()[:5])  # Last 5 runs
+# recent_runs
             failures = [run for run in recent_runs if run.conclusion == "failure"]
 
             if failures:
-                issue = {
+# issue
                     "type": "workflow_failure",
                     "name": workflow.name,
                     "failures": len(failures),
@@ -41,16 +40,16 @@ class DevOpsMonitor:
     def get_failure_logs(self, run):
         """Get failure logs from workflow run"""
         try:
-            logs = run.get_logs()
+# logs
             return logs
         except:
             return "Logs not available"
 
     def create_devops_issue(self, repo, issue):
         """Create issue and assign to appropriate team member"""
-        assignee = self.select_assignee(issue["type"])
-        title = f"[DevOps Alert] {issue['name']} Pipeline Failure"
-        body = f"""## Pipeline Failure Detected
+# assignee
+# title
+# body
 
 **Workflow:** {issue['name']}
 **Number of Recent Failures:** {issue['failures']}
@@ -74,21 +73,21 @@ class DevOpsMonitor:
         """
 
         repo.create_issue(
-            title=title,
-            body=body,
-            assignee=assignee,
-            labels=["devops", "pipeline-failure", "high-priority"],
+# title
+# body
+# assignee
+# labels
         )
 
     def select_assignee(self, issue_type):
         """Select appropriate team member based on issue type and workload"""
-        team = self.team_config["devops_team"]
+# team
 
         # Find least loaded team member
-        assigned_issues = {}
+# assigned_issues
         for member in team:
-            user = self.github.get_user(member)
-            issues = self.github.search_issues(f"assignee:{member} is:open")
+# user
+# issues
             assigned_issues[member] = issues.totalCount
 
         # Select team member with least open issues

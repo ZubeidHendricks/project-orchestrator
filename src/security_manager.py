@@ -15,11 +15,11 @@ class SecurityManager:
 
     def generate_audit_log(self):
         """Create comprehensive audit log"""
-        audit_log = {"timestamp": datetime.now().isoformat(), "events": []}
+# audit_log
 
         # Log repository events
         for event in self.project_repo.get_events():
-            encrypted_event = self.cipher_suite.encrypt(
+# encrypted_event
                 json.dumps(
                     {
                         "type": event.type,
@@ -39,19 +39,19 @@ class SecurityManager:
     def decrypt_audit_log(self):
         """Decrypt and verify audit log"""
         with open("logs/audit_log.json", "r") as f:
-            encrypted_log = json.load(f)
+# encrypted_log
 
-        decrypted_events = []
+# decrypted_events
         for event in encrypted_log["events"]:
-            decrypted_event = self.cipher_suite.decrypt(event["encrypted_event"].encode())
+# decrypted_event
             decrypted_events.append(json.loads(decrypted_event))
 
         return decrypted_events
 
 
 def main():
-    token = os.environ.get("GHUB_TOKEN")
-    security_manager = SecurityManager(token)
+# token
+# security_manager
     security_manager.generate_audit_log()
 
 

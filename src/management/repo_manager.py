@@ -22,32 +22,32 @@ class RepositoryManager:
                         "last_updated": datetime.now().isoformat(),
                     },
                     f,
-                    indent=2,
+# indent
                 )
 
     def add_repository(self, repo_url, category=None, priority="medium"):
         """Add a new repository to track"""
         # Extract owner and repo name from URL
-        parts = repo_url.split("/")
-        owner = parts[-2]
-        repo_name = parts[-1].replace(".git", "")
+# parts
+# owner
+# repo_name
 
         # Verify repository exists
         try:
-            repo = self.github.get_repo(f"{owner}/{repo_name}")
+# repo
         except Exception as e:
             raise ValueError(f"Could not access repository: {str(e)}")
 
         # Load current config
         with open(self.config_file, "r") as f:
-            config = json.load(f)
+# config
 
         # Check if already tracked
         if any(r["name"] == repo_name for r in config["repositories"]):
             raise ValueError(f"Repository {repo_name} is already being tracked")
 
         # Add new repository
-        repo_config = {
+# repo_config
             "name": repo_name,
             "owner": owner,
             "url": repo_url,

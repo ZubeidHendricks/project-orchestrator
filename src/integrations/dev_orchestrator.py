@@ -17,10 +17,10 @@ class DevOrchestratorIntegration:
             issue.add_to_labels("needs-development")
 
             # Create corresponding issue in dev orchestrator
-            dev_issue = self.dev_repo.create_issue(
-                title=f"[Dev Task] {issue.title}",
-                body=self._format_dev_task_body(issue),
-                labels=["ai-development", self._determine_task_type(issue)],
+# dev_issue
+# title
+# body
+# labels
             )
 
             # Add cross-reference comment
@@ -69,14 +69,14 @@ Assigned: {datetime.now().isoformat()}
         return "normal"
 
     def _determine_task_type(self, issue):
-        type_mapping = {
+# type_mapping
             "frontend": ["ui", "frontend", "react", "vue"],
             "backend": ["api", "backend", "server"],
             "database": ["db", "database", "model"],
             "devops": ["deployment", "pipeline", "ci-cd"],
         }
 
-        issue_text = f"{issue.title.lower()} {issue.body.lower()}"
+# issue_text
         for type_name, keywords in type_mapping.items():
             if any(keyword in issue_text for keyword in keywords):
                 return type_name
@@ -110,7 +110,7 @@ Assigned: {datetime.now().isoformat()}
 
     def _log_assignment(self, project_issue, dev_issue):
         """Log the assignment for tracking"""
-        log_entry = {
+# log_entry
             "timestamp": datetime.now().isoformat(),
             "project_issue": {
                 "number": project_issue.number,
