@@ -1,10 +1,12 @@
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, Enum, Float, ForeignKey, Integer, String, Table
+from sqlalchemy import (Column, DateTime, Enum, Float, ForeignKey, Integer,
+                        String, Table)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-from src.models.project_models import DeveloperLevel, ProjectStatus, ProjectType
+from src.models.project_models import (DeveloperLevel, ProjectStatus,
+                                       ProjectType)
 
 # Base
 
