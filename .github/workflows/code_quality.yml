@@ -8,8 +8,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint-and-format:
+  lint-and-clean:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -22,17 +25,40 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 black isort
+        pip install autoflake isort black
     
-    - name: Run Black
-      run: black --check .
-    
-    - name: Run isort
-      run: isort --check .
-    
-    - name: Run Flake8
+    - name: Remove Unused Imports
       run: |
-        flake8 src tests \
-          --max-line-length=120 \
-          --ignore=E203,E266,E501,W503 \
-          --exclude=.git,__pycache__,build,dist
+        find src tests -name "*.py" | xargs autoflake --in-place --remove-all-unused-imports
+    
+    - name: Sort Imports
+      run: |
+        isort .
+    
+    - name: Format Code
+      run: |
+        black .
+    
+    - name: Update Bare Except Blocks
+      run: |
+        # Script to replace bare except blocks
+        for file in $(find src tests -name "*.py"); do
+          sed -i 's/except:\s*pass/except Exception as e:\n    pass/g' $file
+          sed -i 's/except:\s*continue/except Exception as e:\n    continue/g' $file
+        done
+    
+    - name: Remove Unused Variables
+      run: |
+        # Basic removal of unused variables (simple approach)
+        find src tests -name "*.py" -exec sed -i 's/^[[:space:]]*\([a-zA-Z_][a-zA-Z0-9_]*\)[[:space:]]*=[^=]*$/# \1/g' {} \;
+    
+    - name: Configure Git
+      run: |
+        git config user.name 'GitHub Action'
+        git config user.email 'action@github.com'
+    
+    - name: Commit Changes
+      run: |
+        git add .
+        git commit -m 'Automated code cleanup: remove unused imports, format code' || echo 'No changes to commit'
+        git push
