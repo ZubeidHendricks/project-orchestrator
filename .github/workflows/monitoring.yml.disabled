@@ -1,46 +1,43 @@
-name: Project Monitoring
+name: Project Monitoring Workflow
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'  # Every 5 minutes
   workflow_dispatch:
+  schedule:
+    - cron: '0 */4 * * *'  # Run every 4 hours
 
 jobs:
-  monitor:
+  monitor-projects:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      issues: write
+    
     steps:
-    - uses: actions/checkout@v3
-      with:
-        token: ${{ secrets.GHUB_TOKEN }}
-
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.9'
-
+    
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
-    - name: Run Monitoring
-      run: python src/monitoring/monitor.py
-      env:
-        GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
-
-    - name: Check Alerts
-      run: python src/alerts/check_alerts.py
-      env:
-        GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
-
-    - name: Update Dashboard
-      run: python src/dashboard/update_data.py
-
-    - name: Save Monitoring Data
+    
+    - name: Run Project Monitoring
       run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add data/
-        git commit -m "Update monitoring data" || echo "No changes to commit"
-        git push
+        python src/monitoring/monitor.py
+    
+    - name: Run DevOps Monitoring
+      run: |
+        python src/monitoring/devops_monitor.py
+    
+    - name: Check Alerts
+      run: |
+        python src/monitoring/issue_handler.py
+    
+    - name: Manage Alerts
+      run: |
+        python src/monitoring/alert_manager.py

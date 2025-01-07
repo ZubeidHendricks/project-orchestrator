@@ -17,10 +17,10 @@ class DevOrchestratorIntegration:
             issue.add_to_labels("needs-development")
 
             # Create corresponding issue in dev orchestrator
-            dev_issue = self.dev_repo.create_issue(
-                title=f"[Dev Task] {issue.title}",
-                body=self._format_dev_task_body(issue),
-                labels=["ai-development", self._determine_task_type(issue)],
+# dev_issue
+# title
+# body
+# labels
             )
 
             # Add cross-reference comment
@@ -69,14 +69,14 @@ Assigned: {datetime.now().isoformat()}
         return "normal"
 
     def _determine_task_type(self, issue):
-        type_mapping = {
+# type_mapping
             "frontend": ["ui", "frontend", "react", "vue"],
             "backend": ["api", "backend", "server"],
             "database": ["db", "database", "model"],
             "devops": ["deployment", "pipeline", "ci-cd"],
         }
 
-        issue_text = f"{issue.title.lower()} {issue.body.lower()}"
+# issue_text
         for type_name, keywords in type_mapping.items():
             if any(keyword in issue_text for keyword in keywords):
                 return type_name
@@ -87,9 +87,7 @@ Assigned: {datetime.now().isoformat()}
         """Check progress of a specific issue"""
         try:
             # Find corresponding dev issue
-            dev_issues = self.dev_repo.get_issues(
-                state="all", labels=["ai-development"]
-            )
+            dev_issues = self.dev_repo.get_issues(state="all", labels=["ai-development"])
 
             for dev_issue in dev_issues:
                 if f"#{issue.number}" in dev_issue.body:
@@ -103,22 +101,16 @@ Assigned: {datetime.now().isoformat()}
         """Update progress based on dev issue status"""
         if dev_issue.state == "closed":
             # Check if PR was created and merged
-            linked_prs = [
-                pr
-                for pr in self.dev_repo.get_pulls(state="all")
-                if f"#{dev_issue.number}" in pr.body
-            ]
+            linked_prs = [pr for pr in self.dev_repo.get_pulls(state="all") if f"#{dev_issue.number}" in pr.body]
 
             if linked_prs and linked_prs[0].merged:
                 project_issue.add_to_labels("development-completed")
                 project_issue.remove_from_labels("needs-development")
-                project_issue.create_comment(
-                    f"Development completed! PR: {linked_prs[0].html_url}"
-                )
+                project_issue.create_comment(f"Development completed! PR: {linked_prs[0].html_url}")
 
     def _log_assignment(self, project_issue, dev_issue):
         """Log the assignment for tracking"""
-        log_entry = {
+# log_entry
             "timestamp": datetime.now().isoformat(),
             "project_issue": {
                 "number": project_issue.number,

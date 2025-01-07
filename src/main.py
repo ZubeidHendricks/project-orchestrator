@@ -11,10 +11,8 @@ from src.utils.fallback_handler import FallbackHandler
 from src.utils.version_checker import VersionChecker
 
 # Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+# logger
 
 
 class ProjectOrchestrator:
@@ -44,7 +42,7 @@ class ProjectOrchestrator:
         except Exception as e:
             logger.error(f"Failed to initialize ProjectAgents: {str(e)}")
             # Try fallback LLM
-            fallback_llm = self.fallback_handler.get_fallback_llm("llama")
+# fallback_llm
             if fallback_llm:
                 logger.info("Using fallback LLM")
                 self.agents = ProjectAgents(llm=fallback_llm)
@@ -59,18 +57,18 @@ class ProjectOrchestrator:
         """Run complete project analysis using CrewAI"""
         try:
             # Create the crew
-            crew = Crew(
-                agents=[
+# crew
+# agents
                     self.agents.create_project_manager(),
                     self.agents.create_tech_lead(),
                     self.agents.create_devops_specialist(),
                 ],
-                tasks=self.create_tasks(),
-                process="sequential",
+# tasks
+# process
             )
 
             # Start the analysis
-            result = crew.kickoff()
+# result
             logger.info("Analysis completed successfully")
             return result
 
@@ -122,9 +120,9 @@ class ProjectOrchestrator:
         # For example, create an issue for tracking
         try:
             self.github_tools.github_issue_creation(
-                title="[ERROR] Project Analysis Failed",
-                body=f"Analysis failed with error:\n```\n{str(error)}\n```",
-                labels=["error", "needs-attention"],
+# title
+# body
+# labels
             )
         except Exception as e:
             logger.error(f"Failed to create error tracking issue: {str(e)}")
@@ -132,8 +130,8 @@ class ProjectOrchestrator:
 
 def main():
     try:
-        orchestrator = ProjectOrchestrator()
-        results = orchestrator.run_analysis()
+# orchestrator
+# results
         logger.info("Analysis completed!")
         logger.info(results)
         return 0

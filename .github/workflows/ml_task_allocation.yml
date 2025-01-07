@@ -1,0 +1,47 @@
+name: ML Task Allocation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */4 * * *'  # Every 4 hours
+
+jobs:
+  ml-task-allocator:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Verify GitHub Token
+      env:
+        GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
+      run: |
+        echo "Token length: ${#GHUB_TOKEN}"
+        echo "Token first 4 chars: ${GHUB_TOKEN:0:4}"
+    
+    - name: Run ML Task Allocator
+      env:
+        GHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
+      run: |
+        python src/ml_task_allocator.py
+    
+    - name: Upload Allocation Results
+      uses: actions/upload-artifact@v3
+      with:
+        name: ml-task-allocation-logs
+        path: logs/
+        retention-days: 5

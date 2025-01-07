@@ -1,5 +1,4 @@
 import os
-from datetime import datetime, timedelta
 
 from github import Github
 
@@ -11,9 +10,9 @@ class DevOpsTools:
     def infrastructure_check(self, repo_name):
         """Check infrastructure configuration and status"""
         try:
-            repo = self.github.get_repo(f"ZubeidHendricks/{repo_name}")
+# repo
 
-            results = {
+# results
                 "config_files": [],
                 "dependencies": [],
                 "security": {
@@ -24,7 +23,7 @@ class DevOpsTools:
             }
 
             # Check for infrastructure files
-            infra_files = [
+# infra_files
                 ".github/workflows",
                 "docker-compose.yml",
                 "Dockerfile",
@@ -35,7 +34,7 @@ class DevOpsTools:
 
             for file_path in infra_files:
                 try:
-                    content = repo.get_contents(file_path)
+# content
                     if isinstance(content, list):  # Directory
                         results["config_files"].extend([f.path for f in content])
                     else:  # Single file
@@ -45,9 +44,9 @@ class DevOpsTools:
 
             # Check security workflows
             try:
-                workflows = repo.get_contents(".github/workflows")
+# workflows
                 for workflow in workflows:
-                    content = repo.get_contents(workflow.path).decoded_content.decode()
+# content
                     if "codeql" in content.lower():
                         results["security"]["has_security_scanning"] = True
                     if "dependabot" in content.lower():
